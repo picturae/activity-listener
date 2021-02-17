@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <script src="../dist/activityListener.js"></script>
+        <link href="./activityListener.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <h1>Activity Listener</h1>
+        </header>
+
+        <form>
+            <fieldset>
+                <legend>How to keep them from staying focussed?</legend>
+                <button id="ordinary" type="button">Ordinary button</button><br>
+                <button id="watched" type="button">Watched button</button><br>
+                <button id="eraser" type="button">Erase watch</button><br>
+            </fieldset>
+        </form>
+
+        <script>
+            const ordinary = document.querySelector('#ordinary')
+            const watched = document.querySelector('#watched')
+            const eraser = document.querySelector('#eraser')
+
+            document.querySelectorAll('button').forEach(
+                button => button.addEventListener('click', function () {
+                    console.log(`clicked "${button.innerHTML}"`)
+                })
+            )
+
+            const blurIt = function (event) {
+                // const focussed = document.querySelector('button:focus')
+                if (event.target === watched) {
+                    event.target.blur()
+                }
+            }
+
+            activityListener.register('click', blurIt)
+
+            eraser.addEventListener('click', function () {
+                activityListener.erase('click', blurIt)
+            })
+        </script>
+
+    </body>
+</html>
