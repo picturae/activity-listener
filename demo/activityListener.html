@@ -14,15 +14,17 @@
             <fieldset>
                 <legend>How to keep them from staying focussed?</legend>
                 <button id="ordinary" type="button">Ordinary button</button><br>
-                <button id="watched" type="button">Watched button</button><br>
-                <button id="eraser" type="button">Erase watch</button><br>
+                <button id="watched" type="button">Blurs and Greets</button> <-- Watch this button&apos;s behaviour!<br>
+                <button id="eraseBlur" type="button">Erase blur function</button><br>
+                <button id="eraseGreet" type="button">Erase greet function</button><br>
             </fieldset>
         </form>
 
         <script>
             const ordinary = document.querySelector('#ordinary')
             const watched = document.querySelector('#watched')
-            const eraser = document.querySelector('#eraser')
+            const eraseBlur = document.querySelector('#eraseBlur')
+            const eraseGreet = document.querySelector('#eraseGreet')
 
             document.querySelectorAll('button').forEach(
                 button => button.addEventListener('click', function () {
@@ -37,10 +39,20 @@
                 }
             }
 
-            activityListener.register('click', blurIt)
+            const greetThem = function (event) {
+                if (event.target === watched) {
+                    console.warn('Hello World')
+                }
+            }
 
-            eraser.addEventListener('click', function () {
+            activityListener.register('click', blurIt)
+            activityListener.register('click', greetThem)
+
+            eraseBlur.addEventListener('click', function () {
                 activityListener.erase('click', blurIt)
+            })
+            eraseGreet.addEventListener('click', function () {
+                activityListener.erase('click', greetThem)
             })
         </script>
 

@@ -1,9 +1,12 @@
 # Activity Listener
 
 Respond to events in the browser window on a low level.
+
 Uses:
-* redirect to the login page when the user logged off in another browser tab.
-* blur elements after clicking.
+* cross-tab interaction:
+    redirect to the login page when authentication token can't be read.
+* address obscure tasks:
+    blur elements after clicking while peripherals emit enter-keys.
 
 But I can code that myself!
 Sure, but this module knows the tricks and can be controlled from different places!
@@ -28,8 +31,9 @@ activityListener.register('click', logoff)
 ```
 ```
 const blur = function () {
-    if (!localStorage.authToken && user.name) {
-        loginService.logoff()
+    const focussed = document.querySelector('*:focus')
+    if (focussed) {
+        focussed.blur()
     }
 }
 activityListener.register('click', blur)

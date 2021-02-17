@@ -1,7 +1,7 @@
 {
   "name": "activity-listener",
   "version": "1.0.0",
-  "description": "Do something when a timespan of no interaction passes",
+  "description": "Do something at the background",
   "main": "dist/activityListener.js",
   "module": "module/activityListener.js",
   "directories": {
@@ -13,15 +13,13 @@
     "coverage": "cf coverage && jest --coverage",
     "once": "npm run test && npm run build",
     "pretest": "eslint {src,test}/*.js",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "jest",
     "watch": "onchange --initial \"{src,test}/*.js\" -- npm run once --silent"
   },
   "keywords": [
-    "idle",
+    "cross-tab",
+    "obscure task",
     "activity",
-    "monitor",
-    "timer",
-    "tracker",
     "front-end"
   ],
   "author": "Onno van der Zee",
