@@ -30,3 +30,10 @@ button:focus {
 button:focus:after {
     content: " (focussed)";
 }
+
+input[type="radio"] {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: -0.1em;
+    margin: 0 .6em 0 0;
+}

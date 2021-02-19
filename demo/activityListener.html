@@ -17,6 +17,8 @@
                 <button id="watched" type="button">Blurs and Greets</button> <-- Watch this button&apos;s behaviour!<br>
                 <button id="eraseBlur" type="button">Erase blur function</button><br>
                 <button id="eraseGreet" type="button">Erase greet function</button><br>
+                <label><input value="pause" name="running" type="radio">Pause activity</label><br>
+                <label><input value="resume" name="running" type="radio" checked>Resume activity</label><br>
             </fieldset>
         </form>
 
@@ -54,6 +56,17 @@
             eraseGreet.addEventListener('click', function () {
                 activityListener.erase('click', greetThem)
             })
+
+            document.getElementsByName('running').forEach(
+                radio => radio.addEventListener('click', function () {
+                    console.log(`clicked "${radio.value}"`)
+                    if (radio.value === 'pause') {
+                        activityListener.pause()
+                    } else {
+                        activityListener.resume()
+                    }
+                })
+            )
         </script>
 
     </body>

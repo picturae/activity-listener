@@ -43,6 +43,13 @@ or stop:
 
 ```
 activityListener.erase('click', logoff)
+activityListener.clear() // erase all
+```
+
+flow methods:
+```
+activityListener.pause()
+activityListener.resume()
 ```
 
 ## Demo
