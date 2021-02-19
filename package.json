@@ -1,6 +1,6 @@
 {
   "name": "activity-listener",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Do something at the background",
   "main": "dist/activityListener.js",
   "module": "module/activityListener.js",
