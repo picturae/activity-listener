@@ -10,64 +10,28 @@
             <h1>Activity Listener</h1>
         </header>
 
-        <form>
-            <fieldset>
-                <legend>How to keep them from staying focussed?</legend>
-                <button id="ordinary" type="button">Ordinary button</button><br>
-                <button id="watched" type="button">Blurs and Greets</button> <-- Watch this button&apos;s behaviour!<br>
-                <button id="eraseBlur" type="button">Erase blur function</button><br>
-                <button id="eraseGreet" type="button">Erase greet function</button><br>
-                <label><input value="pause" name="running" type="radio">Pause activity</label><br>
-                <label><input value="resume" name="running" type="radio" checked>Resume activity</label><br>
-            </fieldset>
-        </form>
+        <main>
+            <header>
+                <button id="watched" type="button">Click me!</button>
+            </header>
+            <article>
+                <button id="aheadOn" type="button">Ahead On</button>
+                <button id="aheadOff" type="button">Ahead Off</button>
+                <br>
+                <button id="beforeOn" type="button">Before On</button>
+                <button id="beforeOff" type="button">Before Off</button>
+                <br>
+                <button id="pause" type="button">pause</button>
+                <button id="resume" type="button">resume</button>
+                <br>
+            </article>
+            <footer>
+                <textarea ondblclick="this.value=''"></textarea>
+                <br>
+                doubleclick textfield to clear
+            </footer>
+        </main>
 
-        <script>
-            const ordinary = document.querySelector('#ordinary')
-            const watched = document.querySelector('#watched')
-            const eraseBlur = document.querySelector('#eraseBlur')
-            const eraseGreet = document.querySelector('#eraseGreet')
-
-            document.querySelectorAll('button').forEach(
-                button => button.addEventListener('click', function () {
-                    console.log(`clicked "${button.innerHTML}"`)
-                })
-            )
-
-            const blurIt = function (event) {
-                // const focussed = document.querySelector('button:focus')
-                if (event.target === watched) {
-                    event.target.blur()
-                }
-            }
-
-            const greetThem = function (event) {
-                if (event.target === watched) {
-                    console.warn('Hello World')
-                }
-            }
-
-            activityListener.register('click', blurIt)
-            activityListener.register('click', greetThem)
-
-            eraseBlur.addEventListener('click', function () {
-                activityListener.erase('click', blurIt)
-            })
-            eraseGreet.addEventListener('click', function () {
-                activityListener.erase('click', greetThem)
-            })
-
-            document.getElementsByName('running').forEach(
-                radio => radio.addEventListener('click', function () {
-                    console.log(`clicked "${radio.value}"`)
-                    if (radio.value === 'pause') {
-                        activityListener.pause()
-                    } else {
-                        activityListener.resume()
-                    }
-                })
-            )
-        </script>
-
+        <script src="activityListener.js"></script>
     </body>
 </html>

@@ -3,37 +3,50 @@ body {
     background: lightgray;
 }
 
-fieldset {
+main {
     line-height: 2;
+    text-align: center;
 }
+
+main header,
+main artcile,
+main footer {
+    margin: 1em;
+}
+
+main header {
+    font-size: 2em;
+}
+
 button {
     background: slategray;
     border: 1px solid darkslategray;
-    border-radius: 2px;
+    border-radius: .5em;
     color: mistyrose;
-}
-button:after {
-    font-style: italic;
-}
-
-button:hover {
-    box-shadow: 0 0 10px 0 lawngreen;
-}
-button:hover:after {
-    content: " (hovered)";
+    font-size: inherit;
+    padding: .2em .3em;
 }
 
-button:focus {
-    box-shadow: 0 0 10px 0 deepskyblue;
-    outline: none;
-}
-button:focus:after {
-    content: " (focussed)";
+button#watched {
+    background: mistyrose;
+    border: 1px solid pink;
+    border-radius: 50%;
+    color: pink;
+    padding: .5em .7em;
+    box-shadow: 0 0 6px 0 purple;
+    text-shadow: 1px 1px 3px purple;
 }
 
-input[type="radio"] {
-    width: 1.2em;
-    height: 1.2em;
-    vertical-align: -0.1em;
-    margin: 0 .6em 0 0;
+button#watched:hover {
+    background: radial-gradient(mistyrose 48%, pink 86%);
+    border-color: purple;
+}
+
+textarea {
+    background: #fff9;
+    border-radius: .5em;
+    border: 1px solid indigo;
+    padding: .2em .3em;
+    width: 27em;
+    min-height: 13em;
 }
