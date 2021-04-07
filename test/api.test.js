@@ -20,7 +20,7 @@ describe('The API', function () {
     })
 
     afterEach(() => {
-        activityListener.clear()
+        activityListener.destroy()
         // destroy every spy
         jest.clearAllMocks()
     })
@@ -32,16 +32,33 @@ describe('The API', function () {
         expect(spyTestFunction).toHaveBeenCalledTimes(1)
     })
 
-    test('An erased function will not be executed anymore', () => {
+    test(`An erased function will not be executed,
+        unless it's registered again`, () => {
+        activityListener.erase('click', testFunction)
+        activityListener.register('click', testFunction)
         activityListener.erase('click', testFunction)
 
         window.dispatchEvent(mouseEvt.clickRoot)
 
         expect(spyTestFunction).not.toHaveBeenCalled()
+
+        activityListener.register('click', testFunction)
+
+        window.dispatchEvent(mouseEvt.clickRoot)
+
+        expect(spyTestFunction).toHaveBeenCalledWith('Hi')
+        expect(spyTestFunction).toHaveBeenCalledTimes(1)
+
+        activityListener.erase('click', testFunction)
+
+        window.dispatchEvent(mouseEvt.clickRoot)
+
+        // the called count will not rise
+        expect(spyTestFunction).toHaveBeenCalledTimes(1)
     })
 
-    test('A cleared module will not execute anything', () => {
-        activityListener.clear()
+    test('A destroyed module will not execute anything', () => {
+        activityListener.destroy()
 
         window.dispatchEvent(mouseEvt.clickRoot)
 

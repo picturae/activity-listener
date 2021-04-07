@@ -2,14 +2,14 @@ const activityListener = (function () {
     // internal state; isRunning - Boolean
     let isRunning = true
     // lookup table, callback is key, procdeure is value; callbackMap - WeakMap
-    let callbackMap = new WeakMap()
+    const callbackMap = new Map()
 
     /**
      * Execute callback with checks
      * @private
      */
     const execute = function (event, callback) {
-        if (!isRunning || !callbackMap.get(callback)) {
+        if (!isRunning) {
             return
         }
         try {
@@ -29,7 +29,7 @@ const activityListener = (function () {
     const eventHandling = function (aim, type, callback) {
         const eventOptions = { passive: true, capture: true }
         const handler = `on${type}`
-        const procedure = callbackMap.get(callback)
+        const procedure = callbackMap.get(callback).procedure
         if (handler in window) {
             window[aim + 'EventListener'](type, procedure, eventOptions)
         } else if (handler in document) {
@@ -48,7 +48,7 @@ const activityListener = (function () {
         const procedure = function (event) {
             execute(event, callback)
         }
-        callbackMap.set(callback, procedure)
+        callbackMap.set(callback, { type: type, procedure: procedure })
         eventHandling('add', type, callback)
     }
 
@@ -58,15 +58,17 @@ const activityListener = (function () {
      * @param {Function} callback
      */
     const erase = function (type, callback) {
-        eventHandling('remove', type, callbackMap.get(callback))
+        eventHandling('remove', type, callback)
         callbackMap.delete(callback)
     }
 
     /**
      * Erase all callbacks, without knowing them :-)
      */
-    const clear = function () {
-        callbackMap = new WeakMap()
+    const destroy = function () {
+        for (let [key, value] of callbackMap) {
+            erase(value.type, key)
+        }
     }
 
     /**
@@ -84,7 +86,8 @@ const activityListener = (function () {
     }
 
     return {
-        clear: clear,
+        clear: destroy, // deprecated
+        destroy: destroy,
         erase: erase,
         pause: pause,
         register: register,

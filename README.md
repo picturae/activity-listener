@@ -44,12 +44,13 @@ const blur = function () {
 activityListener.register('click', blur)
 ```
 
-or stop:
+or undo the registration:
 
 ```
 activityListener.erase('click', logoff)
-activityListener.clear() // erase all
+activityListener.destroy() // erase all
 ```
+note that 'clear' is now deprecated
 
 flow methods:
 ```
