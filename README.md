@@ -1,12 +1,17 @@
 # Activity Listener
 
-Respond to events in the browser window on a low level.
+Respond to events in the browser window before any other event-handler.
 
-Uses:
-* cross-tab interaction:
-    redirect to the login page when authentication token can't be read.
+Usage:
 * address obscure tasks:
-    blur elements after clicking while peripherals emit enter-keys.
+    blur elements after clicking when peripherals emit enter-keys.
+
+Bad usage:
+* cross-tab interaction:
+    use localstorage-events or serviceworker messaging
+* record user activity:
+    you want the [Inactivity Listener](https://www.npmjs.com/package/inactivity-listener)
+    for that.
 
 But I can code that myself!
 Sure, but this module knows the tricks and can be controlled from different places!
