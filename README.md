@@ -26,7 +26,7 @@ and an es-module in the module folder to import.
 
 To register calls:
 
-```
+```js
 const logoff = function () {
     if (!localStorage.authToken && user.name) {
         loginService.logoff()
@@ -34,7 +34,7 @@ const logoff = function () {
 }
 activityListener.register('click', logoff)
 ```
-```
+```js
 const blur = function () {
     const focussed = document.querySelector('*:focus')
     if (focussed) {
@@ -46,14 +46,14 @@ activityListener.register('click', blur)
 
 or undo the registration:
 
-```
+```js
 activityListener.erase('click', logoff)
 activityListener.destroy() // erase all
 ```
 note that 'clear' is now deprecated
 
 flow methods:
-```
+```js
 activityListener.pause()
 activityListener.resume()
 ```
