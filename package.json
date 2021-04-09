@@ -1,7 +1,7 @@
 {
   "name": "activity-listener",
   "version": "1.2.0",
-  "description": "Respond to user event before ordinary event-handlers are called",
+  "description": "Respond to ui-events before or after ordinary event-handlers do",
   "main": "dist/activityListener.js",
   "module": "module/activityListener.js",
   "directories": {
@@ -17,8 +17,8 @@
     "watch": "onchange --initial \"{src,test}/*.js\" -- npm run once --silent"
   },
   "keywords": [
-    "cross-tab",
-    "obscure task",
+    "event",
+    "event-handlers",
     "activity",
     "front-end"
   ],

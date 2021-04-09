@@ -7,15 +7,23 @@ const activityListener = (function () {
     /**
      * Execute callback with checks
      * @private
+     * @param {Function} timer - wrapped callback
      */
-    const execute = function (event, callback) {
+    const execute = function (callback, delay, event) {
         if (!isRunning) {
             return
         }
-        try {
-            callback(event)
-        } catch (error) {
-            console.error('activityListener caught faulty callback')
+        const tryCatch = function () {
+            try {
+                callback(event)
+            } catch (error) {
+                console.error('activityListener caught faulty callback')
+            }
+        }
+        if (!delay) {
+            tryCatch()
+        } else {
+            setTimeout(tryCatch, delay)
         }
     }
 
@@ -27,9 +35,9 @@ const activityListener = (function () {
      * @param {Function} callback - external function to call in case of event
      */
     const eventHandling = function (aim, type, callback) {
-        const eventOptions = { passive: true, capture: true }
         const handler = `on${type}`
         const procedure = callbackMap.get(callback).procedure
+        const eventOptions = callbackMap.get(callback).options
         if (handler in window) {
             window[aim + 'EventListener'](type, procedure, eventOptions)
         } else if (handler in document) {
@@ -42,14 +50,28 @@ const activityListener = (function () {
     /**
      * Attach callback to event.
      * @param {String} type - event type to watch
-     * @param {Function} callback
+     * @param {Function} ahead - to execute first
+     * @param {Function} done - to execute after all
+     * @param {Number} doneDelay - milliseconds to allow regular event-handler to finish
      */
-    const register = function (type, callback) {
-        const procedure = function (event) {
-            execute(event, callback)
+    const register = function (type, ahead, done, doneDelay = 50) {
+        const enroll = function (callback, options, delay) {
+            const procedure = function (event) {
+                execute(callback, delay, event)
+            }
+            callbackMap.set(callback, {
+                type: type,
+                procedure: procedure,
+                options: options,
+            })
+            eventHandling('add', type, callback)
         }
-        callbackMap.set(callback, { type: type, procedure: procedure })
-        eventHandling('add', type, callback)
+        if (ahead) {
+            enroll(ahead, { passive: true, capture: true }, 0)
+        }
+        if (done) {
+            enroll(done, { passive: true, capture: false }, doneDelay)
+        }
     }
 
     /**

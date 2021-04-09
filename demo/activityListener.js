@@ -7,6 +7,10 @@ const aheadOn = document.querySelector('#aheadOn')
 const aheadOff = document.querySelector('#aheadOff')
 const beforeOn = document.querySelector('#beforeOn')
 const beforeOff = document.querySelector('#beforeOff')
+const doneOn = document.querySelector('#doneOn')
+const doneOff = document.querySelector('#doneOff')
+const errorOn = document.querySelector('#errorOn')
+const errorOff = document.querySelector('#errorOff')
 const textarea = document.querySelector('textarea')
 
 log = function (message) {
@@ -30,6 +34,19 @@ const interceptionAhead = function (event) {
 const interceptionBefore = function (event) {
     if (event.target === watched) {
         log('Before handling "click me" button')
+    }
+}
+
+const interceptionDone = function (event) {
+    if (event.target === watched) {
+        log('Finished handling "click me" button')
+    }
+}
+
+const interceptionError = function (event) {
+    if (event.target === watched) {
+        log('Error handling "click me" button')
+        activityListener.unknownFunction()
     }
 }
 
@@ -66,6 +83,30 @@ beforeOff.addEventListener('click', function () {
     beforeOff.style.display = 'none'
 })
 beforeOff.style.display = 'none'
+
+doneOn.addEventListener('click', function () {
+    activityListener.register('click', undefined, interceptionDone, 1000)
+    doneOff.style.display = ''
+    doneOn.style.display = 'none'
+})
+doneOff.addEventListener('click', function () {
+    activityListener.erase('click', interceptionDone)
+    doneOn.style.display = ''
+    doneOff.style.display = 'none'
+})
+doneOff.style.display = 'none'
+
+errorOn.addEventListener('click', function () {
+    activityListener.register('click', undefined, interceptionError, 1000)
+    errorOff.style.display = ''
+    errorOn.style.display = 'none'
+})
+errorOff.addEventListener('click', function () {
+    activityListener.erase('click', interceptionError)
+    errorOn.style.display = ''
+    errorOff.style.display = 'none'
+})
+errorOff.style.display = 'none'
 
 pause.addEventListener('click', function () {
     activityListener.pause()

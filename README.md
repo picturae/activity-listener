@@ -1,6 +1,6 @@
 # Activity Listener
 
-Respond to events in the browser window before any other event-handler.
+Respond to ui-events before or after ordinary event-handlers do.
 
 Usage:
 * address obscure tasks:
