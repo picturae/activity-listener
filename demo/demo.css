@@ -1,0 +1,133 @@
+:root {
+    --darkpink: #ff99aa;
+}
+
+html, body {
+    background: lightgray;
+    color: slategray;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+button {
+    font-size: inherit;
+}
+
+h1, h4 {
+    font-weight: normal;
+    margin: 0;
+}
+
+button,
+input,
+label,
+textarea {
+    color: darkslategray;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+a,
+button,
+label {
+    cursor: pointer;
+}
+
+[type="checkbox"] {
+    width: 1.3em;
+    height: 1.3em;
+    margin: 0 .5em;
+    vertical-align: text-bottom;
+    border: 1px solid slategray;
+    background: mistyrose;
+    border-radius: .333em;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+}
+[type="checkbox"]:hover {
+    background-color: var(--darkpink);
+}
+[type="checkbox"]:checked {
+    background: url("checkmark.png") center no-repeat;
+    background-color: var(--darkpink);
+    background-size: 80%;
+}
+[type="checkbox"]:focus {
+    outline: none;
+    border-color: royalblue;
+    box-shadow: 0 0 0px 1px royalblue, 0 0 0px 3px white;
+}
+
+main {
+    line-height: 2;
+    text-align: center;
+}
+
+main header,
+main article,
+main footer {
+    margin: 1em;
+}
+
+main header {
+    font-size: 2em;
+}
+
+header button {
+    background: mistyrose;
+    border: 1px solid pink;
+    border-radius: 50%;
+    color: pink;
+    padding: .5em .7em;
+    box-shadow: 0 0 6px 0 purple;
+    text-shadow: 1px 1px 3px purple;
+    width: 7.5em;
+    height: 2.5em;
+}
+
+header button:hover {
+    background: radial-gradient(mistyrose 48%, pink 86%);
+    border-color: purple;
+}
+
+header button:focus {
+    border-color: royalblue;
+    border-width: 2px;
+    box-shadow: inset 2px 2px 0 1px white, 2px 2px 0 1px white;
+    outline: none;
+}
+
+footer button {
+    border: 1px solid slategray;
+    background: mistyrose;
+    border-radius: .333em;
+    padding: .1em .333em;
+}
+footer button:hover {
+    background-color: var(--darkpink);
+    color: white;
+}
+footer button:focus {
+    outline: none;
+    border-color: royalblue;
+    box-shadow: 0 0 0px 1px royalblue, 0 0 0px 3px white;
+}
+
+textarea {
+    display: block;
+    margin: 0 auto;
+    background: #fff9;
+    border-radius: .5em;
+    border: 1px solid slategray;
+    padding: .2em .3em;
+    width: 27em;
+    min-height: 13em;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: royalblue;
+    box-shadow: 0 0 0px 1px royalblue, 0 0 0px 3px white;
+}
+

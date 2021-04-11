@@ -2,8 +2,9 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <script src="event-types.js"></script>
         <script src="../dist/activityListener.js"></script>
-        <link href="./activityListener.css" type="text/css" rel="stylesheet">
+        <link href="./demo.css" type="text/css" rel="stylesheet">
     </head>
     <body>
         <header>
@@ -12,30 +13,30 @@
 
         <main>
             <header>
-                <button id="watched" type="button">Click me!</button>
+                <button id="watched" type="button" tabindex="1">Treat me!</button>
             </header>
             <article>
-                <button id="aheadOn" type="button">Ahead On</button>
-                <button id="aheadOff" type="button">Ahead Off</button>
-                <button id="beforeOn" type="button">Before On</button>
-                <button id="beforeOff" type="button">Before Off</button>
-                <br>
-                <button id="doneOn" type="button">Done On</button>
-                <button id="doneOff" type="button">Done Off</button>
-                <button id="errorOn" type="button">Error On</button>
-                <button id="errorOff" type="button">Error Off</button>
-                <br>
-                <button id="pause" type="button">Pause</button>
-                <button id="resume" type="button">Resume</button>
-                <br>
+                <h4>Ahead of event</h4>
+                <label><input type="checkbox" id="ordinary">Ordinary Ahead</label>
+                <label><input type="checkbox" id="stopping">Stopping</label>
+                <label><input type="checkbox" id="faulty">Faulty</label>
+            </article>
+            <article>
+                <h4>Event Done</h4>
+                <label><input type="checkbox" id="instant">Instant</label>
+                <label><input type="checkbox" id="default">Default Done</label>
+                <label><input type="checkbox" id="delayed">Delayed</label>
             </article>
             <footer>
-                <textarea ondblclick="this.value=''"></textarea>
-                <br>
-                doubleclick textfield to clear
+                <h4>Operational mode</h4>
+                <button id="pause" type="button" tabindex="-1">Pause</button>
+                <button id="resume" type="button" tabindex="-1">Resume</button>
+                <h4>Log</h4>
+                <textarea ondblclick="this.value=''" tabindex="2"></textarea>
+                doubleclick textarea to clear
             </footer>
         </main>
 
-        <script src="activityListener.js"></script>
+        <script src="demo.js"></script>
     </body>
 </html>

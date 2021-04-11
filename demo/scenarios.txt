@@ -1,0 +1,18 @@
+Tabben met 500ms
+-> geen focusin/focusout op window/document
+
+Ahead of focus Treat me! button
+focus over "Treat me!"
+focusin over "Treat me!"
+Ahead of keyup Treat me! button
+keyup over "Treat me!"
+Finished focus Treat me! button
+Finished keyup Treat me! button
+
+Ahead of keydown Treat me! button
+keydown over "Treat me!"
+Ahead of blur Treat me! button
+blur over "Treat me!"
+focusout over "Treat me!"
+Finished keydown Treat me! button
+Finished blur Treat me! button
