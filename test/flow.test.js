@@ -5,7 +5,7 @@ console.warn = jest.fn()
 console.log = jest.fn()
 console.info = jest.fn()
 
-describe('The functions are executed in a known order when the event occurs', function () {
+describe('Coherence between registered handlers', function () {
     let testFunction
     let spyTestFunction
     let normalFunction
@@ -46,6 +46,9 @@ describe('The functions are executed in a known order when the event occurs', fu
         mouseEvt.click = new MouseEvent('click', {
             bubbles: true,
         })
+        mouseEvt.focus = new MouseEvent('focus', {
+            bubbles: false,
+        })
 
         button.addEventListener('click', normalFunction)
     })
@@ -57,41 +60,63 @@ describe('The functions are executed in a known order when the event occurs', fu
         jest.clearAllMocks()
     })
 
-    test('The "Done" function is executed with a delay', () => {
-        // The done function is delayed to allow user handlers to finish
-        jest.useFakeTimers()
+    describe(`The registered handlers are executed in a known order
+        when the event occurs`, function () {
+        test('The "Done" function is executed with a delay', () => {
+            // The done function is delayed to allow user handlers to finish
+            jest.useFakeTimers()
 
-        activityListener.register('click', testFunction, doneFunction)
-        span.dispatchEvent(mouseEvt.click)
+            activityListener.register('click', testFunction, doneFunction)
+            span.dispatchEvent(mouseEvt.click)
 
-        jest.runAllTimers()
+            jest.runAllTimers()
 
-        expect(spyTestFunction).toHaveBeenCalledWith('Hi')
-        expect(spyTestFunction).toHaveBeenCalledTimes(1)
+            expect(spyTestFunction).toHaveBeenCalledWith('Hi')
+            expect(spyTestFunction).toHaveBeenCalledTimes(1)
 
-        expect(spyNormalFunction).toHaveBeenCalledWith('Click')
-        expect(spyNormalFunction).toHaveBeenCalledTimes(1)
+            expect(spyNormalFunction).toHaveBeenCalledWith('Click')
+            expect(spyNormalFunction).toHaveBeenCalledTimes(1)
 
-        expect(spyDoneFunction).toHaveBeenCalledWith('Bye')
-        expect(spyDoneFunction).toHaveBeenCalledTimes(1)
+            expect(spyDoneFunction).toHaveBeenCalledWith('Bye')
+            expect(spyDoneFunction).toHaveBeenCalledTimes(1)
 
-        expect(h2.textContent).toBe('HiClickBye')
+            expect(h2.textContent).toBe('HiClickBye')
+        })
+
+        test('The "Done" function is executed without delay', () => {
+            // The done function is executed as latest
+            activityListener.register('click', testFunction, doneFunction, 0)
+            button.dispatchEvent(mouseEvt.click)
+
+            expect(spyTestFunction).toHaveBeenCalledWith('Hi')
+            expect(spyTestFunction).toHaveBeenCalledTimes(1)
+
+            expect(spyNormalFunction).toHaveBeenCalledWith('Click')
+            expect(spyNormalFunction).toHaveBeenCalledTimes(1)
+
+            expect(spyDoneFunction).toHaveBeenCalledWith('Bye')
+            expect(spyDoneFunction).toHaveBeenCalledTimes(1)
+
+            expect(h2.textContent).toBe('HiClickBye')
+        })
     })
 
-    test('The "Done" function is executed without delay', () => {
-        // The done function is executed as latest
-        activityListener.register('click', testFunction, doneFunction, 0)
-        button.dispatchEvent(mouseEvt.click)
+    describe(`Handlers can be used in multiple event types`, function () {
+        test('The "Done" function is executed without delay', () => {
+            // The done function is executed as latest
+            activityListener.register('click', testFunction)
+            activityListener.register('focus', testFunction)
+            button.dispatchEvent(mouseEvt.click)
+            button.dispatchEvent(mouseEvt.focus)
 
-        expect(spyTestFunction).toHaveBeenCalledWith('Hi')
-        expect(spyTestFunction).toHaveBeenCalledTimes(1)
+            expect(spyTestFunction).toHaveBeenCalledTimes(2)
 
-        expect(spyNormalFunction).toHaveBeenCalledWith('Click')
-        expect(spyNormalFunction).toHaveBeenCalledTimes(1)
+            activityListener.erase('focus', testFunction)
 
-        expect(spyDoneFunction).toHaveBeenCalledWith('Bye')
-        expect(spyDoneFunction).toHaveBeenCalledTimes(1)
+            button.dispatchEvent(mouseEvt.click)
+            button.dispatchEvent(mouseEvt.focus)
 
-        expect(h2.textContent).toBe('HiClickBye')
+            expect(spyTestFunction).toHaveBeenCalledTimes(3)
+        })
     })
 })

@@ -1,8 +1,8 @@
 const activityListener = (function () {
     // internal state; isRunning - Boolean
     let isRunning = true
-    // lookup table, callback is key, procdeure is value; callbackMap - WeakMap
-    const callbackMap = new Map()
+    // lookup, wrapped callback by eventType
+    const registry = {}
 
     /**
      * Execute callback with checks
@@ -36,8 +36,8 @@ const activityListener = (function () {
      */
     const eventHandling = function (aim, type, callback) {
         const handler = `on${type}`
-        const procedure = callbackMap.get(callback).procedure
-        const eventOptions = callbackMap.get(callback).options
+        const procedure = registry[type].get(callback).procedure
+        const eventOptions = registry[type].get(callback).options
         if (handler in window) {
             window[aim + 'EventListener'](type, procedure, eventOptions)
         } else if (handler in document) {
@@ -59,8 +59,10 @@ const activityListener = (function () {
             const procedure = function (event) {
                 execute(callback, delay, event)
             }
-            callbackMap.set(callback, {
-                type: type,
+            if (!registry[type]) {
+                registry[type] = new Map()
+            }
+            registry[type].set(callback, {
                 procedure: procedure,
                 options: options,
             })
@@ -81,16 +83,21 @@ const activityListener = (function () {
      */
     const erase = function (type, callback) {
         eventHandling('remove', type, callback)
-        callbackMap.delete(callback)
+        registry[type].delete(callback)
+        if (!registry[type].size) {
+            delete registry[type]
+        }
     }
 
     /**
      * Erase all callbacks, without knowing them :-)
      */
     const destroy = function () {
-        for (let [key, value] of callbackMap) {
-            erase(value.type, key)
-        }
+        Object.keys(registry).forEach((type) => {
+            for (let key of registry[type].keys()) {
+                erase(type, key)
+            }
+        })
     }
 
     /**
@@ -108,6 +115,7 @@ const activityListener = (function () {
     }
 
     return {
+//         debug: () => console.log('registry', registry),
         clear: destroy, // deprecated
         destroy: destroy,
         erase: erase,
