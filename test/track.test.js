@@ -7,8 +7,10 @@ describe('Coherence between registered handlers', function () {
     let spyNormalFunction
     let doneFunction
     let spyDoneFunction
+    let stopFunction
+    let spyStopFunction
 
-    let h2, button, span
+    let h2, button
     const mouseEvt = {}
     const methods = {}
 
@@ -19,7 +21,6 @@ describe('Coherence between registered handlers', function () {
         `
         h2 = document.querySelector('h2')
         button = document.querySelector('button')
-        span = document.querySelector('button span')
 
         methods.test = () => {}
         testFunction = function () {
@@ -45,6 +46,15 @@ describe('Coherence between registered handlers', function () {
         }
         spyDoneFunction = jest.spyOn(methods, 'done')
 
+        methods.stop = () => {}
+        stopFunction = function (ev) {
+            const word = 'Stop'
+            h2.textContent += word
+            methods.stop(word)
+            ev.stopPropagation()
+        }
+        spyStopFunction = jest.spyOn(methods, 'stop')
+
         mouseEvt.click = new MouseEvent('click', {
             bubbles: true,
         })
@@ -52,7 +62,7 @@ describe('Coherence between registered handlers', function () {
             bubbles: false,
         })
 
-        button.addEventListener('click', normalFunction)
+        jest.useFakeTimers()
     })
 
     afterEach(() => {
@@ -62,66 +72,59 @@ describe('Coherence between registered handlers', function () {
         jest.clearAllMocks()
     })
 
-    describe(`The registered handlers are executed in a known order
-        when the event occurs`, function () {
-        test('The "Done" function is executed with a delay', () => {
-            // The done function is delayed to allow user handlers to finish
-            jest.useFakeTimers()
-
+    describe(`Calling stopPropagation prevents execution Done handler`, function () {
+        test(`Neither handler stops propagation`, () => {
+            button.addEventListener('click', normalFunction)
             activityListener.register('click', testFunction, doneFunction)
-            span.dispatchEvent(mouseEvt.click)
-
+            button.dispatchEvent(mouseEvt.click)
             jest.runAllTimers()
 
-            expect(spyTestFunction).toHaveBeenCalledWith('Hi')
+            // ahead
             expect(spyTestFunction).toHaveBeenCalledTimes(1)
-
-            expect(spyNormalFunction).toHaveBeenCalledWith('Click')
+            // ordinary
             expect(spyNormalFunction).toHaveBeenCalledTimes(1)
-
-            expect(spyDoneFunction).toHaveBeenCalledWith('Bye')
+            // done
             expect(spyDoneFunction).toHaveBeenCalledTimes(1)
+            // not
+            expect(spyStopFunction).toHaveBeenCalledTimes(0)
 
-            expect(h2.textContent).toBe('HiClickBye')
+            button.removeEventListener('click', normalFunction)
         })
 
-        test('The "Done" function is executed without delay', () => {
-            // The done function is executed as latest
-            activityListener.register('click', testFunction, doneFunction, 0)
+        test(`The ordinary handler stops propagation`, () => {
+            button.addEventListener('click', stopFunction)
+            activityListener.register('click', testFunction, doneFunction)
             button.dispatchEvent(mouseEvt.click)
+            jest.runAllTimers()
 
-            expect(spyTestFunction).toHaveBeenCalledWith('Hi')
+            // ahead
             expect(spyTestFunction).toHaveBeenCalledTimes(1)
+            // ordinary
+            expect(spyStopFunction).toHaveBeenCalledTimes(1)
+            // done
+            expect(spyDoneFunction).toHaveBeenCalledTimes(0)
+            // not
+            expect(spyNormalFunction).toHaveBeenCalledTimes(0)
 
-            expect(spyNormalFunction).toHaveBeenCalledWith('Click')
-            expect(spyNormalFunction).toHaveBeenCalledTimes(1)
-
-            expect(spyDoneFunction).toHaveBeenCalledWith('Bye')
-            expect(spyDoneFunction).toHaveBeenCalledTimes(1)
-
-            expect(h2.textContent).toBe('HiClickBye')
+            button.removeEventListener('click', stopFunction)
         })
-    })
 
-    describe(`Handlers can be used in multiple event types`, function () {
-        test(`The callback is executed according to the number of registrations`, () => {
-            activityListener.register('focus', testFunction)
+        test(`The Ahead handler stops propagation`, () => {
+            button.addEventListener('click', normalFunction)
+            activityListener.register('click', stopFunction, doneFunction)
             button.dispatchEvent(mouseEvt.click)
-            button.dispatchEvent(mouseEvt.focus)
+            jest.runAllTimers()
 
-            expect(spyTestFunction).toHaveBeenCalledTimes(1)
+            // ahead
+            expect(spyStopFunction).toHaveBeenCalledTimes(1)
+            // ordinary
+            expect(spyNormalFunction).toHaveBeenCalledTimes(0)
+            // done
+            expect(spyDoneFunction).toHaveBeenCalledTimes(0)
+            // not
+            expect(spyTestFunction).toHaveBeenCalledTimes(0)
 
-            activityListener.register('click', testFunction)
-            button.dispatchEvent(mouseEvt.click)
-            button.dispatchEvent(mouseEvt.focus)
-
-            expect(spyTestFunction).toHaveBeenCalledTimes(3)
-
-            activityListener.erase('focus', testFunction)
-            button.dispatchEvent(mouseEvt.click)
-            button.dispatchEvent(mouseEvt.focus)
-
-            expect(spyTestFunction).toHaveBeenCalledTimes(4)
+            button.removeEventListener('click', normalFunction)
         })
     })
 })

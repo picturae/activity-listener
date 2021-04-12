@@ -7,7 +7,9 @@ const activityListener = (function () {
     /**
      * Execute callback with checks
      * @private
-     * @param {Function} timer - wrapped callback
+     * @param {Function} callback
+     * @param {Number} delay
+     * @param {Event} event
      */
     const execute = function (callback, delay, event) {
         if (!isRunning) {
@@ -115,7 +117,6 @@ const activityListener = (function () {
     }
 
     return {
-//         debug: () => console.log('registry', registry),
         clear: destroy, // deprecated
         destroy: destroy,
         erase: erase,

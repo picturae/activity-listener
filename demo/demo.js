@@ -25,100 +25,123 @@ document.querySelectorAll('article [type="checkbox"]').forEach(checkbox => {
     })
 })
 
-const ordinary = document.querySelector('#ordinary')
-const ordinaryAhead = function (event) {
+const simple_ahead = document.querySelector('#simple_ahead')
+const simpleAhead = function (event) {
     if (event.target === watched) {
-        log(`Ordinary Ahead for ${event.type} on "${event.target.textContent}"`)
+        log(`Simple Ahead of ${event.type} on "${event.target.textContent}"`)
     }
 }
-ordinary.addEventListener('click', function () {
+simple_ahead.addEventListener('click', function () {
     if (this.checked) {
-        eventTypes.forEach(type => activityListener.register(type, ordinaryAhead))
+        eventTypes.forEach(type => activityListener.register(type, simpleAhead))
     } else {
-        eventTypes.forEach(type => activityListener.erase(type, ordinaryAhead))
+        eventTypes.forEach(type => activityListener.erase(type, simpleAhead))
     }
 })
-eventTypes.forEach(type => activityListener.register(type, ordinaryAhead))
-ordinary.checked = true
 
-const stopping = document.querySelector('#stopping')
+const stopping_ahead = document.querySelector('#stopping_ahead')
 const stoppingAhead = function (event) {
     if (event.target === watched) {
-        log(`Stopping event Ahead for ${event.type} on "${event.target.textContent}"`)
+        log(`Stop Propagation Ahead of ${event.type} on "${event.target.textContent}"`)
         event.stopPropagation()
     }
 }
-stopping.addEventListener('click', function () {
+stopping_ahead.addEventListener('click', function () {
     if (this.checked) {
         eventTypes.forEach(type => activityListener.register(type, stoppingAhead))
     } else {
         eventTypes.forEach(type => activityListener.erase(type, stoppingAhead))
     }
 })
-stopping.checked = false
 
-const faulty = document.querySelector('#faulty')
+const faulty_handler = document.querySelector('#faulty_handler')
 const faultyHandler = function (event) {
     if (event.target === watched) {
         log(`Faulty Handler for ${event.type} on "${event.target.textContent}"`)
         activityListener.unknownFunction()
     }
 }
-faulty.addEventListener('click', function () {
+faulty_handler.addEventListener('click', function () {
     if (this.checked) {
         eventTypes.forEach(type => activityListener.register(type, faultyHandler))
     } else {
         eventTypes.forEach(type => activityListener.erase(type, faultyHandler))
     }
 })
-faulty.checked = false
 
 
-const instant = document.querySelector('#instant')
+const simple_action = document.querySelector('#simple_action')
+const simpleAction = function (event) {
+    if (event.target === watched) {
+        log(`Simple Action for ${event.type} on "${event.target.textContent}"`)
+    }
+}
+simple_action.addEventListener('click', function () {
+    if (this.checked) {
+        eventTypes.forEach(type => activityListener.register(type, simpleAction))
+    } else {
+        eventTypes.forEach(type => activityListener.erase(type, simpleAction))
+    }
+})
+
+const stopping_action = document.querySelector('#stopping_action')
+const stoppingAction = function (event) {
+    if (event.target === watched) {
+        log(`Stop Propagation Action for ${event.type} on "${event.target.textContent}"`)
+        event.stopPropagation()
+    }
+}
+stopping_action.addEventListener('click', function () {
+    if (this.checked) {
+        eventTypes.forEach(type => activityListener.register(type, stoppingAction))
+    } else {
+        eventTypes.forEach(type => activityListener.erase(type, stoppingAction))
+    }
+})
+
+
+const instant_done = document.querySelector('#instant_done')
 const instantDone = function (event) {
     if (event.target === watched) {
         log(`Instant Done for ${event.type} on "${event.target.textContent}"`)
     }
 }
-instant.addEventListener('click', function () {
+instant_done.addEventListener('click', function () {
     if (this.checked) {
         eventTypes.forEach(type => activityListener.register(type, undefined, instantDone, 0))
     } else {
         eventTypes.forEach(type => activityListener.erase(type, instantDone))
     }
 })
-instant.checked = false
 
-const defaulting = document.querySelector('#default')
+const default_done = document.querySelector('#default_done')
 const defaultDone = function (event) {
     if (event.target === watched) {
         log(`Default Done for ${event.type} on "${event.target.textContent}"`)
     }
 }
-defaulting.addEventListener('click', function () {
+default_done.addEventListener('click', function () {
     if (this.checked) {
         eventTypes.forEach(type => activityListener.register(type, undefined, defaultDone))
     } else {
         eventTypes.forEach(type => activityListener.erase(type, defaultDone))
     }
 })
-eventTypes.forEach(type => activityListener.register(type, undefined, defaultDone))
-defaulting.checked = true
 
-const delayed = document.querySelector('#delayed')
+const delayed_done = document.querySelector('#delayed_done')
 const delayedDone = function (event) {
     if (event.target === watched) {
         log(`Delayed Done for ${event.type} on "${event.target.textContent}"`)
     }
 }
-delayed.addEventListener('click', function () {
+delayed_done.addEventListener('click', function () {
     if (this.checked) {
         eventTypes.forEach(type => activityListener.register(type, undefined, delayedDone, 500))
     } else {
         eventTypes.forEach(type => activityListener.erase(type, delayedDone))
     }
 })
-delayed.checked = false
+
 
 /* footer */
 

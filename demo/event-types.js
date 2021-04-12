@@ -5,10 +5,17 @@
  * https://developer.mozilla.org/en-US/docs/Web/Events
  */
 
+const eventTypes = [
+    'click',
+    'focus',
+    'readystatechange',
+    'wheel',
+]
+
 /*
     TODO: filter out the deprecated and those that can't be lead or trailed
 */
-const eventTypes = [
+const eventTypesOld = [
     'afterprint',
     'afterscriptexecute',
     'animationcancel',
