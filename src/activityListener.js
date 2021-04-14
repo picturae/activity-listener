@@ -137,6 +137,14 @@ const activityListener = (function () {
         if (done) {
             enroll(done, doneOptions, doneDelay)
         }
+        return function () {
+            if (ahead) {
+                erase(type, ahead)
+            }
+            if (done) {
+                erase(type, done)
+            }
+        }
     }
 
     /**

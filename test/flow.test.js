@@ -53,6 +53,7 @@ describe('Coherence between registered handlers', function () {
         })
 
         button.addEventListener('click', normalFunction)
+        jest.useFakeTimers()
     })
 
     afterEach(() => {
@@ -66,7 +67,6 @@ describe('Coherence between registered handlers', function () {
         when the event occurs`, function () {
         test('The "Done" function is executed with a delay', () => {
             // The done function is delayed to allow user handlers to finish
-            jest.useFakeTimers()
 
             activityListener.register('click', testFunction, doneFunction)
             span.dispatchEvent(mouseEvt.click)
@@ -122,6 +122,28 @@ describe('Coherence between registered handlers', function () {
             button.dispatchEvent(mouseEvt.focus)
 
             expect(spyTestFunction).toHaveBeenCalledTimes(4)
+        })
+    })
+
+    describe(`Handlers can removed using a function`, function () {
+        test(`Registration return a removal function`, () => {
+            const removeClickHandlers = activityListener.register(
+                'click',
+                testFunction,
+                doneFunction,
+                250,
+            )
+            button.dispatchEvent(mouseEvt.click)
+            jest.runAllTimers()
+
+            expect(h2.textContent).toBe('HiClickBye')
+
+            removeClickHandlers()
+            h2.textContent = ''
+            button.dispatchEvent(mouseEvt.click)
+            jest.runAllTimers()
+
+            expect(h2.textContent).toBe('Click')
         })
     })
 })

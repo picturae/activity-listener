@@ -31,7 +31,7 @@ const logoff = function () {
         loginService.logoff()
     }
 }
-activityListener.register('click', logoff)
+const eraseClickLogoff = activityListener.register('click', logoff)
 ```
 
 To register calls at the end of an event's propagation:
@@ -42,19 +42,20 @@ const blur = function () {
         focussed.blur()
     }
 }
-activityListener.register('click', undefined, blur)
+const eraseClickBlur = activityListener.register('click', undefined, blur)
 ```
 
 Or to register calls both at the start and the end,
 and allow time for the handlers to finish:
 ```js
-activityListener.register('click', logoff, blur, 100)
+const eraseClickRegistration = activityListener.register('click', logoff, blur, 100)
 ```
 
 To undo the registration:
 ```js
 activityListener.erase('click', logoff)
 activityListener.destroy() // erase all
+eraseClickRegistration()
 ```
 note that 'clear' is now deprecated
 
