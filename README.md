@@ -24,8 +24,7 @@ and an es-module in the module folder to import.
 
 ## Usage
 
-To register calls:
-
+To register calls at the very start an event:
 ```js
 const logoff = function () {
     if (!localStorage.authToken && user.name) {
@@ -34,6 +33,8 @@ const logoff = function () {
 }
 activityListener.register('click', logoff)
 ```
+
+To register calls at the end of an event's propagation:
 ```js
 const blur = function () {
     const focussed = document.querySelector('*:focus')
@@ -41,11 +42,16 @@ const blur = function () {
         focussed.blur()
     }
 }
-activityListener.register('click', blur)
+activityListener.register('click', undefined, blur)
 ```
 
-or undo the registration:
+Or to register calls both at the start and the end,
+and allow time for the handlers to finish:
+```js
+activityListener.register('click', logoff, blur, 100)
+```
 
+To undo the registration:
 ```js
 activityListener.erase('click', logoff)
 activityListener.destroy() // erase all

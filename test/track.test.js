@@ -72,7 +72,7 @@ describe('Coherence between registered handlers', function () {
         jest.clearAllMocks()
     })
 
-    describe(`Calling stopPropagation prevents execution Done handler`, function () {
+    describe(`Calling stopPropagation will not prevent execution Done handler`, function () {
         test(`Neither handler stops propagation`, () => {
             button.addEventListener('click', normalFunction)
             activityListener.register('click', testFunction, doneFunction)
@@ -102,7 +102,7 @@ describe('Coherence between registered handlers', function () {
             // ordinary
             expect(spyStopFunction).toHaveBeenCalledTimes(1)
             // done
-            expect(spyDoneFunction).toHaveBeenCalledTimes(0)
+            expect(spyDoneFunction).toHaveBeenCalledTimes(1)
             // not
             expect(spyNormalFunction).toHaveBeenCalledTimes(0)
 
@@ -112,6 +112,25 @@ describe('Coherence between registered handlers', function () {
         test(`The Ahead handler stops propagation`, () => {
             button.addEventListener('click', normalFunction)
             activityListener.register('click', stopFunction, doneFunction)
+            button.dispatchEvent(mouseEvt.click)
+            jest.runAllTimers()
+
+            // ahead
+            expect(spyStopFunction).toHaveBeenCalledTimes(1)
+            // ordinary
+            expect(spyNormalFunction).toHaveBeenCalledTimes(0)
+            // done
+            expect(spyDoneFunction).toHaveBeenCalledTimes(1)
+            // not
+            expect(spyTestFunction).toHaveBeenCalledTimes(0)
+
+            button.removeEventListener('click', normalFunction)
+        })
+
+        test(`Removing the Done handler will prevent execution if its timer`, () => {
+            button.addEventListener('click', normalFunction)
+            activityListener.register('click', stopFunction, doneFunction)
+            activityListener.erase('click', doneFunction)
             button.dispatchEvent(mouseEvt.click)
             jest.runAllTimers()
 
