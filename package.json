@@ -1,6 +1,6 @@
 {
   "name": "activity-listener",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Respond to ui-events before or after ordinary event-handlers do",
   "main": "dist/activityListener.js",
   "module": "module/activityListener.js",
